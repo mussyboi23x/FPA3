@@ -188,7 +188,7 @@ document.addEventListener('drop', async e => {
     container.innerHTML = '';
     player = ruffle.createPlayer();
     container.appendChild(player);
-    await player.load(file);
+    await player.load({ data: file });
     player.focus();
   }
 });
