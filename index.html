@@ -164,6 +164,52 @@
 
     await waitForRuffle();
 
+    const ruffle = window.RufflePlayer.newest();
+let player = ruffle.createPlayer(); // mutable because we might replace it
+const container = document.getElementById("ruffle");
+container.appendChild(player);
+
+try {
+  await player.load("FPAWorld2.swf");
+  player.focus();
+} catch (e) {
+  console.error("Error loading SWF:", e);
+}
+
+// 👇 File input (optional for iPad or fallback)
+const fileInput = document.getElementById('file-input');
+if (fileInput) {
+  fileInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (file && file.name.endsWith('.swf')) {
+      container.innerHTML = '';
+      player = ruffle.createPlayer();
+      container.appendChild(player);
+      await player.load(file);
+      player.focus();
+    }
+  });
+}
+
+// 👇 Drag-and-drop handler
+document.addEventListener('dragover', e => {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+});
+
+document.addEventListener('drop', async e => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.swf')) {
+    container.innerHTML = '';
+    player = ruffle.createPlayer();
+    container.appendChild(player);
+    await player.load(file);
+    player.focus();
+  }
+});
+
+    
     // Create player and append to container
     const ruffle = window.RufflePlayer.newest();
     const player = ruffle.createPlayer();
