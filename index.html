@@ -176,26 +176,44 @@ try {
   console.error("Error loading SWF:", e);
 }
 
+
 document.addEventListener('dragover', e => {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
 });
-
-document.addEventListener('drop', async e => {
+    
+document.addEventListener('drop', e => {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
   if (file && file.name.endsWith('.swf')) {
-    container.innerHTML = '';
-    player = ruffle.createPlayer();
-    container.appendChild(player);
-    try {
-      await player.load({ data: file }); // ✅ This line is the key fix
-      player.focus();
-    } catch (err) {
-      console.error("Failed to load dropped SWF:", err);
-    }
+    const reader = new FileReader();
+
+    reader.onload = async function () {
+      const arrayBuffer = reader.result;
+      const swfBytes = new Uint8Array(arrayBuffer);
+
+      container.innerHTML = '';
+      player = ruffle.createPlayer();
+      container.appendChild(player);
+
+      try {
+        await player.load({ data: swfBytes }); // ✅ now Ruffle gets clean binary
+        player.focus();
+      } catch (err) {
+        console.error("Ruffle couldn't load file:", err);
+      }
+    };
+
+    reader.onerror = function () {
+      console.error("File could not be read!", reader.error);
+    };
+
+    reader.readAsArrayBuffer(file); // 👈 this is the magic part
   }
 });
+
+
+    
     // Left joystick - arrow keys
     const DEADZONE = 40;
     const leftJoystick = nipplejs.create({
