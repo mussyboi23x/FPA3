@@ -188,13 +188,14 @@ document.addEventListener('drop', async e => {
     container.innerHTML = '';
     player = ruffle.createPlayer();
     container.appendChild(player);
-    await player.load({ data: file });
-    player.focus();
+    try {
+      await player.load({ data: file }); // ✅ This line is the key fix
+      player.focus();
+    } catch (err) {
+      console.error("Failed to load dropped SWF:", err);
+    }
   }
 });
-
-
-
     // Left joystick - arrow keys
     const DEADZONE = 40;
     const leftJoystick = nipplejs.create({
