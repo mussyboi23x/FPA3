@@ -96,6 +96,7 @@
 </head>
 
 <body>
+<input type="file" id="file-input" accept=".swf" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
 
 <script>
   function sendKey(code, type = 'keydown') {
@@ -175,6 +176,21 @@
     } catch (e) {
         console.error("Error loading SWF:", e);
     }
+    
+    document.getElementById('file-input').addEventListener('change', async function (event) {
+  const file = event.target.files[0];
+  if (file && file.name.endsWith('.swf')) {
+    container.innerHTML = '';
+    const newPlayer = ruffle.createPlayer();
+    container.appendChild(newPlayer);
+    try {
+      await newPlayer.load(file);
+      newPlayer.focus();
+    } catch (err) {
+      console.error("Error loading selected file:", err);
+    }
+  }
+});
 
 
     // Left joystick - arrow keys
