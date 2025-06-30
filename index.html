@@ -96,7 +96,6 @@
 </head>
 
 <body>
-<input type="file" id="file-input" accept=".swf" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
 
 <script>
   function sendKey(code, type = 'keydown') {
@@ -164,8 +163,9 @@
 
     await waitForRuffle();
 
-    const ruffle = window.RufflePlayer.newest();
-let player = ruffle.createPlayer(); // mutable because we might replace it
+    // Create player and append to container
+const ruffle = window.RufflePlayer.newest();
+let player = ruffle.createPlayer();
 const container = document.getElementById("ruffle");
 container.appendChild(player);
 
@@ -176,22 +176,6 @@ try {
   console.error("Error loading SWF:", e);
 }
 
-// 👇 File input (optional for iPad or fallback)
-const fileInput = document.getElementById('file-input');
-if (fileInput) {
-  fileInput.addEventListener('change', async (event) => {
-    const file = event.target.files[0];
-    if (file && file.name.endsWith('.swf')) {
-      container.innerHTML = '';
-      player = ruffle.createPlayer();
-      container.appendChild(player);
-      await player.load(file);
-      player.focus();
-    }
-  });
-}
-
-// 👇 Drag-and-drop handler
 document.addEventListener('dragover', e => {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
@@ -209,34 +193,6 @@ document.addEventListener('drop', async e => {
   }
 });
 
-    
-    // Create player and append to container
-    const ruffle = window.RufflePlayer.newest();
-    const player = ruffle.createPlayer();
-    const container = document.getElementById("ruffle");
-    container.appendChild(player);
-
-    try {
-        await player.load("FPAWorld2.swf");
-        console.log("SWF loaded successfully!");
-    } catch (e) {
-        console.error("Error loading SWF:", e);
-    }
-    
-    document.getElementById('file-input').addEventListener('change', async function (event) {
-  const file = event.target.files[0];
-  if (file && file.name.endsWith('.swf')) {
-    container.innerHTML = '';
-    const newPlayer = ruffle.createPlayer();
-    container.appendChild(newPlayer);
-    try {
-      await newPlayer.load(file);
-      newPlayer.focus();
-    } catch (err) {
-      console.error("Error loading selected file:", err);
-    }
-  }
-});
 
 
     // Left joystick - arrow keys
