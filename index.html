@@ -163,6 +163,8 @@
 
     await waitForRuffle();
 
+    window.RufflePlayer.config = { renderer: "canvas" };
+
     // Create player and append to container
 const ruffle = window.RufflePlayer.newest();
 let player = ruffle.createPlayer();
@@ -197,7 +199,7 @@ document.addEventListener('drop', e => {
       container.appendChild(player);
 
       try {
-        await player.load({ data: swfBytes }); // ✅ now Ruffle gets clean binary
+        await player.load({ data: swfBytes, allowScriptAccess: true });
         player.focus();
       } catch (err) {
         console.error("Ruffle couldn't load file:", err);
