@@ -194,26 +194,25 @@ document.addEventListener('drop', e => {
       const arrayBuffer = reader.result;
       const swfBytes = new Uint8Array(arrayBuffer);
 
-      container.innerHTML = '';
+      // 💣 Teardown previous player
+      if (player && player.remove) player.remove(); // if supported
+      container.innerHTML = ''; // clear DOM
+
+      // 🎮 Rebuild fresh player
       player = ruffle.createPlayer();
       container.appendChild(player);
 
       try {
-        await player.load({ data: swfBytes, allowScriptAccess: true });
+        await player.load({ data: swfBytes });
         player.focus();
       } catch (err) {
-        console.error("Ruffle couldn't load file:", err);
+        console.error("Failed to load dropped SWF:", err);
       }
     };
 
-    reader.onerror = function () {
-      console.error("File could not be read!", reader.error);
-    };
-
-    reader.readAsArrayBuffer(file); // 👈 this is the magic part
+    reader.readAsArrayBuffer(file);
   }
 });
-
 
     
     // Left joystick - arrow keys
