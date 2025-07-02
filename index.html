@@ -214,6 +214,14 @@ document.addEventListener('drop', e => {
   }
 });
 
+     function resetJoystick() {
+  joystick.x = 0;
+  joystick.y = 0;
+  joystick.active = false;
+
+  // Optional: reset visual position
+  joystickThumb.style.transform = 'translate(0px, 0px)';
+}
     
     // Left joystick - arrow keys
     const DEADZONE = 40;
