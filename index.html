@@ -242,6 +242,32 @@ document.addEventListener('drop', e => {
         activeDirections = {};
     }
 
+    let activeTouchId = null;
+
+canvas.addEventListener('touchstart', e => {
+  const touch = e.changedTouches[0];
+  activeTouchId = touch.identifier;
+  updateJoystick(touch);
+});
+
+canvas.addEventListener('touchmove', e => {
+  for (const touch of e.changedTouches) {
+    if (touch.identifier === activeTouchId) {
+      updateJoystick(touch);
+    }
+  }
+});
+
+canvas.addEventListener('touchend', e => {
+  for (const touch of e.changedTouches) {
+    if (touch.identifier === activeTouchId) {
+      resetJoystick();
+      activeTouchId = null;
+    }
+  }
+});
+
+
     leftJoystick.on('move', (evt, data) => {
         if (data.distance < DEADZONE || !data.direction?.angle) {
             clearAllDirections();
