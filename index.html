@@ -150,6 +150,7 @@
 
     await loadRuffleScript();
 
+    
     // Wait for RufflePlayer.newest() to be ready
     function waitForRuffle() {
         return new Promise(resolve => {
@@ -163,7 +164,11 @@
 
     await waitForRuffle();
 
-    window.RufflePlayer.config = { renderer: "canvas" };
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+  maxFrameRate: 24, // or 30, or whatever you want
+  renderer: "canvas" // optional: more memory-friendly than webgl
+};
 
     // Create player and append to container
 const ruffle = window.RufflePlayer.newest();
