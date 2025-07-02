@@ -178,6 +178,39 @@ try {
   console.error("Error loading SWF:", e);
 }
 
+    function updateJoystick(touch) {
+  const rect = canvas.getBoundingClientRect();
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+
+  // Example logic to map touch to movement vector
+  const dx = x - joystick.centerX;
+  const dy = y - joystick.centerY;
+
+  joystick.x = dx;
+  joystick.y = dy;
+  joystick.active = true;
+
+  // Optional: visualize joystick thumb here
+  // joystickThumb.style.transform = `translate(${dx}px, ${dy}px)`;
+}
+
+function resetJoystick() {
+  joystick.x = 0;
+  joystick.y = 0;
+  joystick.active = false;
+
+  // Optional: reset visual position
+  joystickThumb.style.transform = 'translate(0px, 0px)';
+}
+
+    
+document.addEventListener('touchend', () => {
+  if (navigator.maxTouchPoints === 0 || !('ontouchstart' in window)) return;
+  const touches = [...(document.touches || [])];
+  if (touches.length === 0) resetJoystick();
+});
+
 
 document.addEventListener('dragover', e => {
   e.preventDefault();
