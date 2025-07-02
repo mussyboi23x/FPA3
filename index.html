@@ -164,18 +164,20 @@
 
     await waitForRuffle();
 
-    window.RufflePlayer = window.RufflePlayer || {};
-    window.RufflePlayer.config = {
-  maxFrameRate: 24, // or 30, or whatever you want
-  renderer: "canvas" // optional: more memory-friendly than webgl
-};
-
+   
     // Create player and append to container
 const ruffle = window.RufflePlayer.newest();
 let player = ruffle.createPlayer();
 const container = document.getElementById("ruffle");
 container.appendChild(player);
 
+    
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+       maxFrameRate: 10 // or 30, or whatever you want
+       renderer: "canvas" // optional: more memory-friendly than webgl
+    };
+    
 try {
   await player.load("https://raw.githubusercontent.com/3kh0s/3kh0s.github.io/main/games/fancypantsadventure3/FPAWorld3.swf");
   player.focus();
