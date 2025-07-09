@@ -177,7 +177,7 @@ const container = document.getElementById("ruffle");
 container.appendChild(player);
 
 try {
-  await player.load("fpa3zlib.swf");
+  await player.load("https://raw.githubusercontent.com/3kh0s/3kh0s.github.io/main/games/fancypantsadventure3/FPAWorld3.swf");
   player.focus();
 } catch (e) {
   console.error("Error loading SWF:", e);
